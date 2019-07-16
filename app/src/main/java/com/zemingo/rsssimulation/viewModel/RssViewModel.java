@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.zemingo.rsssimulation.communication.RssCallback;
-import com.zemingo.rsssimulation.communication.RssRepo;
+import com.zemingo.rsssimulation.repositories.RssRepository;
 import me.toptas.rssconverter.RssFeed;
 import me.toptas.rssconverter.RssItem;
 
@@ -15,9 +15,9 @@ import java.util.List;
 
 public class RssViewModel extends ViewModel {
 
-    private RssRepo mRssRepo;
+    private RssRepository mRssRepo;
 
-    public RssViewModel(RssRepo mRssRepo) {
+    public RssViewModel(RssRepository mRssRepo) {
         this.mRssRepo = mRssRepo;
     }
 

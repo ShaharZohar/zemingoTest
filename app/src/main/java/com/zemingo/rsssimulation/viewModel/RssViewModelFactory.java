@@ -3,13 +3,13 @@ package com.zemingo.rsssimulation.viewModel;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import com.zemingo.rsssimulation.communication.RssRepo;
+import com.zemingo.rsssimulation.repositories.RssRepository;
 
 public class RssViewModelFactory implements ViewModelProvider.Factory {
 
-    private RssRepo mRssRepo;
+    private RssRepository mRssRepo;
 
-    public RssViewModelFactory(RssRepo rssRepo) {
+    public RssViewModelFactory(RssRepository rssRepo) {
         this.mRssRepo = rssRepo;
     }
 

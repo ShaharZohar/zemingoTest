@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.zemingo.rsssimulation.R;
-import com.zemingo.rsssimulation.communication.RemoteRssRepository;
+import com.zemingo.rsssimulation.repositories.RemoteRssRepository;
 import com.zemingo.rsssimulation.viewModel.RssViewModel;
 import com.zemingo.rsssimulation.viewModel.RssViewModelFactory;
 import me.toptas.rssconverter.RssItem;
