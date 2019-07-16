@@ -12,7 +12,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-
+import java.util.concurrent.Executors;
 
 public class RssRequestHandler {
 
@@ -29,7 +29,7 @@ public class RssRequestHandler {
     private RssRequestHandler() {
         msRssService =
                 buildClient()
-                .create(RssService.class);
+                        .create(RssService.class);
     }
 
     private static RssService msRssService;
@@ -39,6 +39,7 @@ public class RssRequestHandler {
                 .Builder()
                 .baseUrl(Constants.BASE_URL)
                 .client(new OkHttpClient.Builder().build())
+                .callbackExecutor(Executors.newSingleThreadExecutor())
                 .addConverterFactory(RssConverterFactory.Companion.create())
                 .build();
     }
@@ -53,12 +54,10 @@ public class RssRequestHandler {
                             final RssFeed rssFeed = parseFeed(response);
                             if (rssFeed != null) {
                                 callback.onReceived(rssFeed);
-                            }
-                            else {
+                            } else {
                                 callback.onFailure(new Exception("Unable to get rss feed"));
                             }
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             callback.onFailure(e);
                         }
                     }
@@ -74,7 +73,7 @@ public class RssRequestHandler {
     @Nullable
     private RssFeed parseFeed(@NotNull final Response<RssFeed> response) {
         if (response.isSuccessful()) {
-            return  response.body();
+            return response.body();
         }
 
         return null;
