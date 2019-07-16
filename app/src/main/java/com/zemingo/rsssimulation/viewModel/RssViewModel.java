@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.zemingo.rsssimulation.communication.RssCallback;
-import com.zemingo.rsssimulation.communication.RssRequestHandler;
+import com.zemingo.rsssimulation.communication.RssRepo;
 import me.toptas.rssconverter.RssFeed;
 import me.toptas.rssconverter.RssItem;
 
@@ -14,6 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RssViewModel extends ViewModel {
+
+    private RssRepo mRssRepo;
+
+    public RssViewModel(RssRepo mRssRepo) {
+        this.mRssRepo = mRssRepo;
+    }
 
     private static final String TAG = "RssViewModel";
 
@@ -28,9 +34,8 @@ public class RssViewModel extends ViewModel {
     }
 
     private void fetchRss(@NonNull final String url) {
-        RssRequestHandler
-                .getInstance()
-                .getRss(url, new RssCallback() {
+        mRssRepo
+                .fetchRss(url, new RssCallback() {
                     @Override
                     public void onReceived(RssFeed feed) {
                         Log.d(TAG, "Got rss feed for " + url);

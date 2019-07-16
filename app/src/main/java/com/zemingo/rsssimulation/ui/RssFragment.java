@@ -13,7 +13,9 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.zemingo.rsssimulation.R;
+import com.zemingo.rsssimulation.communication.RemoteRssRepository;
 import com.zemingo.rsssimulation.viewModel.RssViewModel;
+import com.zemingo.rsssimulation.viewModel.RssViewModelFactory;
 import me.toptas.rssconverter.RssItem;
 import org.jetbrains.annotations.NotNull;
 
@@ -77,7 +79,10 @@ public class RssFragment extends Fragment {
 
     @NotNull
     private RssViewModel initRssViewModel() {
-        RssViewModel mRssViewModel = ViewModelProviders.of(this).get(RssViewModel.class);
+        RssViewModel mRssViewModel = ViewModelProviders
+                .of(this, new RssViewModelFactory(new RemoteRssRepository()))
+                .get(RssViewModel.class);
+
         setProgressBarVisibility(true);
         mRssViewModel
                 .getRssItemsLiveData()
