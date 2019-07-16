@@ -1,5 +1,7 @@
 package com.zemingo.rsssimulation.ui;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -16,6 +18,10 @@ import com.zemingo.rsssimulation.models.RssIdMapper;
 public class RssActivity extends AppCompatActivity {
 
     private RssIdMapper mRssIdMapper = new RssCategoryIdMapper();
+
+    public static Intent newIntent(@NonNull final Context context) {
+        return new Intent(context, RssActivity.class);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
