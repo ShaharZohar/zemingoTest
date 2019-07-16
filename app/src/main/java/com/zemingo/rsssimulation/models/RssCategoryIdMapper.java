@@ -3,23 +3,23 @@ package com.zemingo.rsssimulation.models;
 import androidx.annotation.NonNull;
 import com.zemingo.rsssimulation.communication.Constants;
 
-public class RssCategoryUrlMapper implements RssUrlMapper {
+public class RssCategoryIdMapper implements RssIdMapper {
 
     @Override
-    public String getUrl(@NonNull RssCategory category) {
-        String url = null;
+    public String getRssId(@NonNull RssCategory category) {
+        String id = null;
         switch (category) {
             case SPORT:
-                url = Constants.SPORTS_URL;
+                id = Constants.SPORTS_URL_ID;
                 break;
             case CARS:
-                url = Constants.CARS_URL;
+                id = Constants.CARS_URL_ID;
                 break;
             case CULTURE:
-                url = Constants.CULTURE_URL;
+                id = Constants.CULTURE_URL_ID;
                 break;
         }
 
-        return url;
+        return id;
     }
 }

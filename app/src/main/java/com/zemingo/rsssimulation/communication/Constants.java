@@ -8,9 +8,8 @@ public class Constants {
      * Sports - http://www.globes.co.il/webservice/rss/rssfeeder.asmx/FeederNode?iID=2605
      * Culture - http://www.globes.co.il/webservice/rss/rssfeeder.asmx/FeederNode?iID=3317
     * */
-//    public static final String BASE_URL = "http://www.globes.co.il/webservice/rss/rssfeeder.asmx/FeederNode?iID=";
-    public static final String BASE_URL = "http://www.globes.co.il/webservice/rss/rssfeeder.asmx/";
-    public static final String CARS_URL = "3220";
-    public static final String SPORTS_URL = "2605";
-    public static final String CULTURE_URL = "3317";
+    static final String BASE_URL = "http://www.globes.co.il/webservice/rss/rssfeeder.asmx/";
+    public static final String CARS_URL_ID = "3220";
+    public static final String SPORTS_URL_ID = "2605";
+    public static final String CULTURE_URL_ID = "3317";
 }

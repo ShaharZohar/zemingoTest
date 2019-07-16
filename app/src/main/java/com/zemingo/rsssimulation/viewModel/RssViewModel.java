@@ -15,13 +15,13 @@ import java.util.List;
 
 public class RssViewModel extends ViewModel {
 
-    private RssRepository mRssRepo;
+    private static final String TAG = "RssViewModel";
 
-    public RssViewModel(RssRepository mRssRepo) {
+    RssViewModel(RssRepository mRssRepo) {
         this.mRssRepo = mRssRepo;
     }
 
-    private static final String TAG = "RssViewModel";
+    private RssRepository mRssRepo;
 
     private MutableLiveData<List<RssItem>> mRssItemsLiveData = new MutableLiveData<>();
 
@@ -29,22 +29,22 @@ public class RssViewModel extends ViewModel {
         return mRssItemsLiveData;
     }
 
-    public void getRss(@NonNull final String url) {
-        fetchRss(url);
+    public void getRss(@NonNull final String urlId) {
+        fetchRss(urlId);
     }
 
-    private void fetchRss(@NonNull final String url) {
+    private void fetchRss(@NonNull final String urlId) {
         mRssRepo
-                .fetchRss(url, new RssCallback() {
+                .fetchRss(urlId, new RssCallback() {
                     @Override
                     public void onReceived(RssFeed feed) {
-                        Log.d(TAG, "Got rss feed for " + url);
+                        Log.d(TAG, "Got rss feed for " + urlId);
                         postRssItems(feed.getItems());
                     }
 
                     @Override
                     public void onFailure(Throwable tr) {
-                        Log.d(TAG, "Failed to get rss for " + url);
+                        Log.d(TAG, "Failed to get rss for " + urlId);
                         postRssItems(new ArrayList<RssItem>());
                     }
                 });

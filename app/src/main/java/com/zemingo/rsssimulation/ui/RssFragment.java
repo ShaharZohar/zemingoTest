@@ -24,15 +24,15 @@ import java.util.List;
 public class RssFragment extends Fragment {
 
     private static final String TAG = "RssFragment";
-    private static final String KEY_RSS_URL = "com.zemingo.rsssimulation.KEY_RSS_URL";
+    private static final String KEY_RSS_URL_ID = "com.zemingo.rsssimulation.KEY_RSS_URL_ID";
 
     private final RssAdapter mAdapter = new RssAdapter();
     private View mProgressBar;
 
-    static RssFragment getInstance(@NonNull final String url) {
+    static RssFragment getInstance(@NonNull final String rssUrlId) {
         final RssFragment rssFragment = new RssFragment();
         final Bundle args = new Bundle();
-        args.putString(KEY_RSS_URL, url);
+        args.putString(KEY_RSS_URL_ID, rssUrlId);
         rssFragment.setArguments(args);
         return rssFragment;
     }
@@ -65,16 +65,16 @@ public class RssFragment extends Fragment {
     }
 
     private String getRssUrl(@Nullable Bundle savedInstanceState) {
-        String url = null;
+        String urlId = null;
         if (savedInstanceState != null) {
-            url = savedInstanceState.getString(KEY_RSS_URL);
+            urlId = savedInstanceState.getString(KEY_RSS_URL_ID);
         }
 
-        if (url == null) {
-            throw new IllegalArgumentException("Could not get rss url");
+        if (urlId == null) {
+            throw new IllegalArgumentException("Could not get rss urlId");
         }
 
-        return url;
+        return urlId;
     }
 
     @NotNull
