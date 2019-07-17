@@ -11,8 +11,10 @@
         android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/rss_container"
             android:padding="8dp"
             android:elevation="12dp"
+            android:background="?attr/selectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

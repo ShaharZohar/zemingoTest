@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.zemingo.rsssimulation.R;
 import com.zemingo.rsssimulation.repositories.RemoteRssRepository;
+import com.zemingo.rsssimulation.utils.InternetBrowserHandler;
 import com.zemingo.rsssimulation.viewModel.RssViewModel;
 import com.zemingo.rsssimulation.viewModel.RssViewModelFactory;
 import me.toptas.rssconverter.RssItem;
@@ -45,8 +46,7 @@ public class RssFragment extends Fragment {
         try {
             String url = getRssUrl(getArguments());
             rssViewModel.getRss(url);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.e(TAG, "Failed to parse rss URL", e);
         }
     }
@@ -101,6 +101,23 @@ public class RssFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(mAdapter);
+
+        mAdapter.setOnRssClickListener(new RssAdapter.OnRssClickListener() {
+            @Override
+            public void onClick(@NotNull final RssItem item) {
+                if (item.getLink() != null) {
+                    openBrowser(item.getLink());
+                }
+            }
+        });
+    }
+
+    private void openBrowser(@NonNull final String url) {
+        try {
+            InternetBrowserHandler.getInstance().openBrowsweLink(requireContext(), url);
+        } catch (Exception e) {
+            Log.e(TAG, "Unable to open link", e);
+        }
     }
 
     private void initProgressBar(@NonNull View view) {
@@ -110,8 +127,7 @@ public class RssFragment extends Fragment {
     private void setProgressBarVisibility(boolean isVisible) {
         if (isVisible) {
             mProgressBar.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             mProgressBar.setVisibility(View.GONE);
         }
     }

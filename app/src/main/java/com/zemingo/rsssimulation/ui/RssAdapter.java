@@ -15,12 +15,14 @@ import java.util.List;
 public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssViewHolder> {
 
     private final List<RssItem> mData = new LinkedList<>();
+    private OnRssClickListener mOnRssClickListener;
 
     @NonNull
     @Override
     public RssViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new RssViewHolder(
-                LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_rss, parent, false));
+                LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.list_item_rss, parent, false));
     }
 
     @Override
@@ -39,22 +41,42 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssViewHolder> {
         notifyDataSetChanged();
     }
 
+    void setOnRssClickListener(OnRssClickListener onRssClickListener) {
+        this.mOnRssClickListener = onRssClickListener;
+    }
+
     class RssViewHolder extends RecyclerView.ViewHolder {
 
+        private View mRssContainer;
         private TextView mTitle;
         private TextView mDate;
 
         RssViewHolder(@NonNull View itemView) {
             super(itemView);
+            mRssContainer = itemView.findViewById(R.id.rss_container);
             mTitle = itemView.findViewById(R.id.rss_title);
             mDate = itemView.findViewById(R.id.rss_date);
         }
 
-        void bind(final RssItem rssItem) {
+        void bind(@NonNull final RssItem rssItem) {
             mTitle.setText(rssItem.getTitle());
             mDate.setText(rssItem.getPublishDate());
+            setClickListener(rssItem);
         }
 
+        private void setClickListener(final RssItem rssItem) {
+            mRssContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mOnRssClickListener != null) {
+                        mOnRssClickListener.onClick(rssItem);
+                    }
+                }
+            });
+        }
+    }
 
+    interface OnRssClickListener {
+        void onClick(@NonNull final RssItem item);
     }
 }
