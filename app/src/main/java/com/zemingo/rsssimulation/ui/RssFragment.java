@@ -79,12 +79,12 @@ public class RssFragment extends Fragment {
 
     @NotNull
     private RssViewModel initRssViewModel() {
-        RssViewModel mRssViewModel = ViewModelProviders
+        RssViewModel rssViewModel = ViewModelProviders
                 .of(this, new RssViewModelFactory(new RemoteRssRepository()))
                 .get(RssViewModel.class);
 
         setProgressBarVisibility(true);
-        mRssViewModel
+        rssViewModel
                 .getRssItemsLiveData()
                 .observe(this, new Observer<List<RssItem>>() {
                     @Override
@@ -93,7 +93,7 @@ public class RssFragment extends Fragment {
                         onRssFeedReceived(rssItems);
                     }
                 });
-        return mRssViewModel;
+        return rssViewModel;
     }
 
     private void initRecyclerView(@NonNull View view) {
