@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.zemingo.rsssimulation.R;
+import com.zemingo.rsssimulation.models.LoadingProgress;
 import com.zemingo.rsssimulation.repositories.RemoteRssRepository;
 import com.zemingo.rsssimulation.utils.InternetBrowserHandler;
 import com.zemingo.rsssimulation.viewModel.RssViewModel;
@@ -83,13 +84,20 @@ public class RssFragment extends Fragment {
                 .of(this, new RssViewModelFactory(new RemoteRssRepository()))
                 .get(RssViewModel.class);
 
-        setProgressBarVisibility(true);
+        rssViewModel
+                .getLoadingProgressLiveData()
+                .observe(this, new Observer<LoadingProgress>() {
+                    @Override
+                    public void onChanged(LoadingProgress loadingProgress) {
+                        onProgressChanged(loadingProgress);
+                    }
+                });
+
         rssViewModel
                 .getRssItemsLiveData()
                 .observe(this, new Observer<List<RssItem>>() {
                     @Override
                     public void onChanged(List<RssItem> rssItems) {
-                        setProgressBarVisibility(false);
                         onRssFeedReceived(rssItems);
                     }
                 });
@@ -122,6 +130,17 @@ public class RssFragment extends Fragment {
 
     private void initProgressBar(@NonNull View view) {
         mProgressBar = view.findViewById(R.id.rss_progress_bar);
+    }
+
+    private void onProgressChanged(LoadingProgress loadingProgress) {
+        switch (loadingProgress) {
+            case IDLE:
+                setProgressBarVisibility(false);
+                break;
+            case LOADING:
+                setProgressBarVisibility(true);
+                break;
+        }
     }
 
     private void setProgressBarVisibility(boolean isVisible) {
