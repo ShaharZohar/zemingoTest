@@ -1,10 +1,13 @@
 package com.zemingo.rsssimulation.ui;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -12,26 +15,36 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.zemingo.rsssimulation.R;
 import com.zemingo.rsssimulation.models.LoadingProgress;
 import com.zemingo.rsssimulation.repositories.RemoteRssRepository;
 import com.zemingo.rsssimulation.utils.InternetBrowserHandler;
 import com.zemingo.rsssimulation.viewModel.RssViewModel;
 import com.zemingo.rsssimulation.viewModel.RssViewModelFactory;
-import me.toptas.rssconverter.RssItem;
+
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import me.toptas.rssconverter.RssItem;
 
 public class RssFragment extends Fragment {
 
     private static final String TAG = "RssFragment";
     private static final String KEY_RSS_URL_ID = "com.zemingo.rsssimulation.KEY_RSS_URL_ID";
 
+    private static ArrayList<String> s_rssUrlsList = new ArrayList<>();
+    private static boolean s_isMultiRssFeed = false;
+
+    private  final Handler refreshHandler = new Handler();
+
     private final RssAdapter mAdapter = new RssAdapter();
     private View mProgressBar;
 
     static RssFragment getInstance(@NonNull final String rssUrlId) {
+        s_isMultiRssFeed = false;
         final RssFragment rssFragment = new RssFragment();
         final Bundle args = new Bundle();
         args.putString(KEY_RSS_URL_ID, rssUrlId);
@@ -39,14 +52,46 @@ public class RssFragment extends Fragment {
         return rssFragment;
     }
 
+    static RssFragment getInstance(@NonNull final ArrayList<String> rssUrlsList) {
+        s_isMultiRssFeed = true;
+        final RssFragment rssFragment = new RssFragment();
+        s_rssUrlsList = rssUrlsList;
+        return rssFragment;
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        getRssFeeds();
+
+//        Runnable runnable = new Runnable() {
+//            @Override
+//            public void run() {
+//                // check for feeds updates
+//                getRssFeeds();
+//                refreshHandler.postDelayed(this, 5 * 1000);
+//            }
+//        };
+//
+//        runnable.run();
+
+    }
+
+    private void getRssFeeds(){
         RssViewModel rssViewModel = initRssViewModel();
 
         try {
-            String url = getRssUrl(getArguments());
-            rssViewModel.getRss(url);
+            if(!s_isMultiRssFeed) {
+                String url = getRssUrl(getArguments());
+                ArrayList<String> rssUrlsList = new ArrayList<>();
+                rssUrlsList.add(url);
+                rssViewModel.getRss(rssUrlsList);
+            }
+            else // is multi rss-feed
+            {
+                rssViewModel.getRss(s_rssUrlsList);
+            }
         } catch (Exception e) {
             Log.e(TAG, "Failed to parse rss URL", e);
         }
@@ -115,6 +160,13 @@ public class RssFragment extends Fragment {
             public void onClick(@NotNull final RssItem item) {
                 if (item.getLink() != null) {
                     openBrowser(item.getLink());
+                }
+
+                if(item.getTitle() != null) {
+                    // save rss title into shared preference
+                    SharedPreferences.Editor editor = getActivity().getSharedPreferences("RSS_SP", 0).edit();
+                    editor.putString("rss_title", item.getTitle());
+                    editor.apply();
                 }
             }
         });
